@@ -31,7 +31,13 @@ const BlogsListScreen = (props) => {
 
             ></FlatList>
             {/* <Text>{Bloglist}</Text> */}
-            <Button title='Add Blog' onPress={Bloglist.addBlogPost}></Button>
+            <TouchableOpacity
+                style={{ backgroundColor: 'blue',height:40}}
+                onPress={Bloglist.addBlogPost}
+            >
+                <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'white'}}>Add Blog</Text></View>
+                
+            </TouchableOpacity>
         </View>
     )
 }
@@ -85,5 +91,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
 
-    }
+    },
+
 })
