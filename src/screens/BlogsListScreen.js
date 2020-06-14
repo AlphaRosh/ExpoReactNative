@@ -1,96 +1,81 @@
-import React, { useContext } from 'react'
-import { StyleSheet, Text, View, LinearGradient, TouchableOpacity, FlatList, Button } from 'react-native'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import {BlogContext} from '../context/BlogContext'
+import React, { useContext, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Button,
+  TouchableOpacity
+} from 'react-native';
+import { Context } from '../context/BlogContext';
+import { Feather } from '@expo/vector-icons';
 
+const BlogsListScreen = ({ navigation }) => {
+  const { state, deleteBlogPost, getBlogPosts } = useContext(Context);
 
-const BlogsListScreen = (props) => {
-    const Bloglist = useContext(BlogContext);
-    // console.log(Bloglist)
-    // console.log(`props: ${props}`)
-    return (
-        <View style={styles.container}>
-            <FlatList
-                data={Bloglist.data}
-                renderItem={({ item }) => {
-                    return (
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                            <Text>Title: {item.title}</Text>
-                            <Text>Author: {item.Author}</Text>
-                            <MaterialCommunityIcons
-                                name="delete"
-                                size={25}
-                                color="blue"
-                                left={20}
-                            />
-                        </View>
-                    )
-                }}
-                keyExtractor={(item, index) => index.toString()}
-                contentInset={{bottom:16}}
+  useEffect(() => {
+    getBlogPosts();
 
-            ></FlatList>
-            {/* <Text>{Bloglist}</Text> */}
+    const listener = navigation.addListener('didFocus', () => {
+      getBlogPosts();
+    });
+
+    return () => {
+      listener.remove();
+    };
+  }, []);
+
+  return (
+    <View>
+      <FlatList
+        data={state}
+        keyExtractor={blogPost => blogPost.title}
+        renderItem={({ item }) => {
+          return (
             <TouchableOpacity
-                style={{ backgroundColor: 'blue',height:40}}
-                onPress={Bloglist.addBlogPost}
+              onPress={() => navigation.navigate('Show', { id: item.id })}
             >
-                <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text style={{color:'white'}}>Add Blog</Text></View>
-                
+              <View style={styles.row}>
+                <Text style={styles.title}>
+                  {item.title} - {item.id}
+                </Text>
+                <TouchableOpacity onPress={() => deleteBlogPost(item.id)}>
+                  <Feather style={styles.icon} name="trash" />
+                </TouchableOpacity>
+              </View>
             </TouchableOpacity>
-        </View>
+          );
+        }}
+      />
+    </View>
+  );
+};
+
+BlogsListScreen.navigationOptions = ({ navigation }) => {
+  return {
+    headerRight: (
+      <TouchableOpacity onPress={() => navigation.navigate('Create')}>
+        <Feather name="plus" size={30} />
+      </TouchableOpacity>
     )
-}
-
-BlogsListScreen.navigationOptions = (screenProps) => ({
-
-    headerTitle: () => (
-        <View style={{ flexDirection: 'row' }}>
-            <MaterialCommunityIcons
-                name="blogger"
-                size={25}
-                color="blue"
-                left={20}
-            />
-            <Text style={{ fontSize: 18, fontWeight: '500' }}>My Blogs</Text>
-        </View>
-    ),
-    headerTitleStyle: {
-        textAlign: 'left',
-
-        fontSize: 24
-    },
-    headerRightContainerStyle: {
-        paddingRight: 10,
-    },
-    headerRight: () => (
-        
-        <TouchableOpacity
-            onPress={() => {
-                // console.log(screenProps)
-                screenProps.navigation.navigate('ShowBlog', { title: 'Show Blog' })
-            }}
-            style={{ backgroundColor: 'blue', color: 'white' }}>
-            <MaterialCommunityIcons
-                name="blogger"
-                size={25}
-                color="white"
-                left={20}
-            />
-        </TouchableOpacity>
-    )
-
-
-
-})
-
-export default BlogsListScreen
-
+  };
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    borderTopWidth: 1,
+    borderColor: 'gray'
+  },
+  title: {
+    fontSize: 18
+  },
+  icon: {
+    fontSize: 24
+  }
+});
 
-    },
-
-})
+export default BlogsListScreen;

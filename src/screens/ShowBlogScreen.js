@@ -1,23 +1,37 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useContext } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Context } from '../context/BlogContext';
+import { EvilIcons } from '@expo/vector-icons';
 
-const ShowBlogScreen = (props) => {
-    return (
-        <View style={styles.container}>
-            <Text>ShowBlog Screen</Text>
-        </View>
+const ShowBlogScreen = ({ navigation }) => {
+  const { state } = useContext(Context);
+
+  const blogPost = state.find(
+    blogPost => blogPost.id === navigation.getParam('id')
+  );
+
+  return (
+    <View>
+      <Text>{blogPost.title}</Text>
+      <Text>{blogPost.content}</Text>
+    </View>
+  );
+};
+
+ShowBlogScreen.navigationOptions = ({ navigation }) => {
+  return {
+    headerRight: (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('Edit', { id: navigation.getParam('id') })
+        }
+      >
+        <EvilIcons name="pencil" size={35} />
+      </TouchableOpacity>
     )
-}
-ShowBlogScreen.navigationOptions = ({ navigation }) => ({
-    title: navigation.getParam('title', 'Home')
-})
+  };
+};
 
-export default ShowBlogScreen
+const styles = StyleSheet.create({});
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-})
+export default ShowBlogScreen;
