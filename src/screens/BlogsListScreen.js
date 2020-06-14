@@ -7,11 +7,12 @@ import {
   Button,
   TouchableOpacity
 } from 'react-native';
-import { Context } from '../context/BlogContext';
-import { Feather } from '@expo/vector-icons';
+import { Context as BlogContext } from '../context/BlogContext';
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 const BlogsListScreen = ({ navigation }) => {
-  const { state, deleteBlogPost, getBlogPosts } = useContext(Context);
+    //const {state===blogposts}
+  const { state, deleteBlogPost, getBlogPosts } = useContext(BlogContext);
 
   useEffect(() => {
     getBlogPosts();
@@ -40,7 +41,7 @@ const BlogsListScreen = ({ navigation }) => {
                   {item.title} - {item.id}
                 </Text>
                 <TouchableOpacity onPress={() => deleteBlogPost(item.id)}>
-                  <Feather style={styles.icon} name="trash" />
+                  <MaterialIcons style={styles.icon} name="delete" />
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
@@ -55,7 +56,7 @@ BlogsListScreen.navigationOptions = ({ navigation }) => {
   return {
     headerRight: (
       <TouchableOpacity onPress={() => navigation.navigate('Create')}>
-        <Feather name="plus" size={30} />
+        <MaterialIcons name="add-circle" color="blue" size={30} />
       </TouchableOpacity>
     )
   };

@@ -9,8 +9,10 @@ export default (reducer, actions, initialState) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     // actions === { addBlogPost: (dispatch) => { return () => {} } }
-    const boundActions = {};
-    for (let key in actions) {
+      const boundActions = {};
+      //looping through actions object
+      for (let key in actions) {
+        //'key'=== 'addBlogPost'
       boundActions[key] = actions[key](dispatch);
     }
 

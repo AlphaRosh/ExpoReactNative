@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
-import { Context } from '../context/BlogContext';
+import { Context as BlogContext} from '../context/BlogContext';
 import BlogPostForm from '../components/BlogPostForm';
 
 const EditBlogScreen = ({ navigation }) => {
   const id = navigation.getParam('id');
-  const { state, editBlogPost } = useContext(Context);
+  const { state, editBlogPost } = useContext(BlogContext);
 
   const blogPost = state.find(blogPost => blogPost.id === id);
 
