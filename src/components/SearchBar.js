@@ -22,7 +22,7 @@ export default SearchBar;
 const styles = StyleSheet.create({
     backgroundStyle: {
         marginTop: 10,
-        backgroundColor: '#F0EEEE',
+        backgroundColor: '#00B3FF',
         height: 50,
         flexDirection: 'row',
         marginBottom: 10,
@@ -31,13 +31,16 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         flex: 1,
-        fontSize: 18
+        fontSize: 18,
+        color: 'white'
+        
 
     },
     iconStyle: {
         fontSize: 25,
         alignSelf: 'center',
-        marginHorizontal: 15
+        marginHorizontal: 15,
+        color:'white'
     }
 
 });

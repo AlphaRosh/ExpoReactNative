@@ -11,14 +11,17 @@ import {
     Linking
 } from 'react-native'
 
+//Ignore Warnings
 YellowBox.ignoreWarnings([
     'VirtualizedLists should never be nested', // TODO: Remove when fixed
   ])
 
 const RestaurantScreen = (props) => {
+           
+   
     // console.log(props.navigation.state);
-    const { item } = props.navigation.state.params;
-    const { restaurant } = item;
+    const { item } = props.navigation.state.params;//Getting the params out of navigation
+    const { restaurant } = item;//Getting restaurant details
     return (
         <>
             <View style={styles.container}>
@@ -54,6 +57,7 @@ const RestaurantScreen = (props) => {
                     >
 
                     </FlatList>
+                    {/** Using Linking to take user to Zomato website for seeing the menu */}
                     <Button title="Menu" onPress={()=>Linking.openURL(restaurant.menu_url)}/>
                 </ScrollView>
             </View>

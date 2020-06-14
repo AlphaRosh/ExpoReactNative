@@ -1,0 +1,50 @@
+if (!user.loggedIn) {
+        return (
+            <Text>User Logged out</Text>
+        )
+    } else {
+        return (
+            <CCard>
+                {/* username */}
+                <CCardSection>
+                    <CTextInput
+                        ctextiplabel='Email'
+                        ctextipvalue={this.state.email}
+                        ctextipplaceholder='abc@gmail.com'
+                        ctextipIsautocorrect={false}
+                        ctextiponChangetText={email => this.setState({ email })}
+
+                    />
+                    {/* <TextInput
+                        style={{ height: 40 }}
+                        placeholder="Type here to translate!"
+                        onChangeText={text => this.setState({text})}
+                        value={this.state.text}
+                    />
+                    <Text style={{ padding: 10, fontSize: 42 }}>
+                        {this.state.text.split(' ').map((word) => word && '🍕').join(' ')}
+                    </Text> */}
+                </CCardSection>
+                {/*Password */}
+                <CCardSection >
+                    <CTextInput
+                        ctextiplabel='Password'
+                        ctextipvalue={this.state.password}
+                        ctextipplaceholder='password'
+                        ctextipIsautocorrect={false}
+                        ctextipIssecureTextEntry={true}
+                        ctextiponChangetText={password => this.setState({ password })}
+
+                    />
+                </CCardSection>
+                <Text style={LoginFormStyle.errorStyle}>
+                    {this.state.error}
+                </Text>
+                {/**Login Button */}
+                <CCardSection>
+                    {this.renderButton()}
+                </CCardSection>
+
+            </CCard>
+        );
+    }

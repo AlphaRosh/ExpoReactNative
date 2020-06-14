@@ -1,8 +1,7 @@
 import React, { useReducer } from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Button } from 'react-native'
 import * as firebase from 'firebase'
 
-//Reducer Function
 const reducer = (state, action) => {
     //action (type,payload) 
     //type: email_Changed,password_Changed,userLogin_Success,userLogin_failure
@@ -17,63 +16,71 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 password: action.payload
+
             }
-        case 'userLogin_Success':
+        case 'userSignUp_Success':
             return {
                 ...state,
                 ...INITIAL_STATE,
-                user: action.payload,
+                IsSuccess: action.payload,
                 errorMessage: ""
 
+
             }
-        case 'userLogin_Failure':
+        case 'userSignUp_Failure':
             console.log(action.payload)
             return {
                 ...state,
-                errorMessage: action.payload
+                ...INITIAL_STATE,
+                errorMessage: action.payload,
+                IsSuccess: false
             }
         default:
             return state
 
     }
 }
-const INITIAL_STATE = { email: "", password: "", errorMessage: "", user: null } //Initial State 
+const INITIAL_STATE = { email: "", password: "", errorMessage: "", user: null, IsSuccess: false }
 
-const LoginScreen = (props) => {
-    const [state, dispatch] = useReducer(reducer, INITIAL_STATE);//useReducer syntax
+const RegisterScreen = (props) => {
+    const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
-    //OnChangeText Logic for text inout component
     const onChangeText = (event, type) => {
         const { text } = event.nativeEvent;
         dispatch({ type: type, payload: text });
     }
-    //Destructuring the props state values
-    const { email, password, errorMessage, user } = state;
 
-    //Login Logic : 
-    const handleLogin = (email, password) => {
-        //console.log(`${email} ,${password}`)
+    const { email, password, errorMessage, user, IsSuccess } = state;
+
+    const handleSignUp = (email, password) => {
+        console.log(`${email} ,${password}`)
         firebase
             .auth()
-            .signInWithEmailAndPassword(email, password)
+            .createUserWithEmailAndPassword(email, password)
             .then((user) => {
-                dispatch({ type: 'userLogin_Success', payload: user });
-                props.navigation.navigate('Restaurant', { IsSignedIn: true });
+                dispatch({ type: 'userSignUp_Success', payload: true });
+
             })
             .catch((error) => {
 
-                dispatch({ type: 'userLogin_Failure', payload: error.message });
+                dispatch({ type: 'userSignUp_Failure', payload: error.message });
             })
     }
-
+    const renderArea = () => {
+        return (
+            <View>
+                <Text style={styles.success}>User Created Successfully</Text>
+                <Button title='Go Back To Login' onPress={() => props.navigation.navigate('Login')}></Button>
+            </View>
+        )
+    }
     return (
         <View style={styles.container}>
-            <Text style={styles.greeting}>{`Hello again.\nWelcome Back`}</Text>
+            <Text style={styles.greeting}>{`Thanks For Choosing \nPlease Provide Details for SignUp`}</Text>
 
-            <View style={styles.errorMessage}>
-                <Text style={styles.error}>
-                    {errorMessage}
-                </Text>
+            <View style={styles.Message}>
+                <Text style={styles.error}>{errorMessage}</Text>
+                {IsSuccess ? renderArea() : null}
 
             </View>
 
@@ -84,7 +91,6 @@ const LoginScreen = (props) => {
                         style={styles.input}
                         autoCorrect={false}
                         placeholder='abc@test.com'
-
                         onChange={(event) => { onChangeText(event, 'email_Changed'); }}
                         value={email}
                     >
@@ -107,24 +113,24 @@ const LoginScreen = (props) => {
 
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => { handleLogin(email, password); }}
+                    onPress={() => { handleSignUp(email, password); }}
                 >
-                    <Text style={{ color: 'white', fontSize: 18, fontWeight: '300' }}>Sign In</Text>
+                    <Text style={{ color: 'white', fontSize: 18, fontWeight: '300' }}>Create User</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={{ alignSelf: 'center', marginTop: 15 }}
                     onPress={() => props.navigation.navigate('Register')}>
                     <Text style={{ color: 'gray', fontSize: 15 }}>
                         New To Here? <Text style={{ color: "#1034A6", fontWeight: '500' }}>Sign Up</Text>
                     </Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         </View>
     )
 }
 
-export default LoginScreen
+export default RegisterScreen
 
 const styles = StyleSheet.create({
     container: {
@@ -137,7 +143,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
 
     },
-    errorMessage: {
+    Message: {
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
@@ -145,6 +151,13 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     error: {
+        color: 'red',
+        fontSize: 15,
+        fontWeight: '400',
+        alignSelf: 'center',
+        justifyContent: 'center'
+    },
+    success: {
         color: 'red',
         fontSize: 15,
         fontWeight: '400',

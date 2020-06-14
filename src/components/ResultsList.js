@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native'
 import ResultsDetail from './ResultsDetail'
-import { withNavigation } from 'react-navigation';
-
+import { withNavigation } from 'react-navigation';//When we dont want to pass the navigation prop directly. 
+ 
 
 const ResultsList = ({ title, results, navigation }) => {
     return (
@@ -16,8 +16,9 @@ const ResultsList = ({ title, results, navigation }) => {
                 keyExtractor={result => result.restaurant.id}
                 renderItem={({ item }) => {
                     return (
-                        <TouchableOpacity onPress={() =>navigation.navigate('Restaurant',{item})}>
-                            <ResultsDetail result={item.restaurant} />
+                        <TouchableOpacity onPress={() => navigation.navigate('Restaurant', { item })}>
+                            {/* For showing the restaurant details */}
+                            <ResultsDetail result={item.restaurant} /> 
                         </TouchableOpacity>
                     )
                 }}
@@ -27,7 +28,7 @@ const ResultsList = ({ title, results, navigation }) => {
     )
 }
 
-export default withNavigation(ResultsList)
+export default withNavigation(ResultsList)//withNavigation(Component) returns a component with navigation props
 
 const styles = StyleSheet.create({
     titleSytle: {
