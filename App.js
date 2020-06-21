@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar } from 'react-native';
-import {Ionicons} from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
 
 //Navigation Format
 // - AppSwitchNavigation
@@ -23,7 +23,7 @@ import {
 } from "react-navigation";
 import { createDrawerNavigator } from "react-navigation-drawer"
 import { createMaterialTopTabNavigator, createBottomTabNavigator } from "react-navigation-tabs";
-import {createStackNavigator} from "react-navigation-stack"
+import { createStackNavigator } from "react-navigation-stack"
 
 //importing screens
 // import {
@@ -38,6 +38,7 @@ import DashboardScreen from "./screens/DashboardScreen"
 import Feed from "./screens/FeedScreen"
 import Profile from "./screens/ProfileScreen"
 import Settings from "./screens/SettingsScreen"
+import Details from "./screens/DetailsScreen"
 
 
 export default function App() {
@@ -55,25 +56,103 @@ export default function App() {
   );
 }
 
+const FeedStack = createStackNavigator(
+  {
+    Feed: {
+      screen: Feed,
+      navigationOptions: ({ navigation }) => {
+        return {
+
+          headerLeft: () => (
+            <Ionicons
+              name="md-menu"
+              size={30}
+              color="black"
+              style={{ paddingLeft: 10 }}
+              onPress={() => navigation.openDrawer()}
+            />
+
+          )
+        }
+      }
+    },
+    Detail: {
+      screen: Details
+    }
+  },
+  {
+    defaultNavigationOptions:()=> {
+      gestureEnabled: false
+    }
+  }
+)
+
+const ProfileStack = createStackNavigator(
+  {
+    Profile: {
+      screen: Profile,
+      navigationOptions: ({ navigation }) => {
+        return {
+          headerTitle: 'Profile',
+          headerLeft: () => (
+
+            <>
+              <Ionicons
+                name="md-menu"
+                size={30}
+                color="black"
+                style={{ paddingLeft: 10 }}
+                onPress={() => navigation.openDrawer()}
+              />
+            </>
+          )
+
+        }
+      }
+    }
+  }
+)
+const SettingsStack = createStackNavigator(
+  {
+    Settings: {
+      screen: Settings,
+      navigationOptions: ({ navigation }) => {
+        return {
+          headerTitle: 'Settings',
+          headerLeft: () => (
+            <Ionicons
+              name="md-menu"
+              size={30}
+              color="black"
+              style={{ paddingLeft: 10 }}
+              onPress={() => navigation.openDrawer()}
+            />
+          )
+        }
+      }
+    }
+  }
+)
 //create tab navigation
 const DashboardTabNavigator = createMaterialTopTabNavigator(
   {
-  Feed,
-  Profile,
-  Settings
-},
+    Feed: FeedStack,
+    Profile: ProfileStack,
+    Settings: SettingsStack
+  },
   {
-    navigationOptions:({ navigation }) => {
+    navigationOptions: ({ navigation }) => {
       // console.log(`${navigation.state.routeName},${navigation.state.index}`)
       const { routeName } = navigation.state.routes[navigation.state.index]
       // console.log(routeName)
       return {
+        headerShown: false,
         headerTitle: routeName
       }
-       
-      
-        
-      
+
+
+
+
     }
   }
 )
@@ -81,19 +160,6 @@ const DashboardTabNavigator = createMaterialTopTabNavigator(
 const DashboardStacknavigator = createStackNavigator({
   DashboardTabNavigator: DashboardTabNavigator
 
-}, {
-    defaultNavigationOptions: ({ navigation }) => {
-    return {
-      headerLeft: () => (
-        <Ionicons
-          name="md-menu"
-          size={30}
-          color="black"
-          style={{ paddingLeft: 10 }}
-          onPress={()=>navigation.openDrawer()}
-        />)
-    }
-  }
 });
 //create drawer navigation
 const AppDrawerNavigator = createDrawerNavigator({
