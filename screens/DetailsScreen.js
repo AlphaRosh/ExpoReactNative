@@ -1,15 +1,15 @@
 import React from 'react'
-import { StyleSheet, Text, View ,Button} from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
-const FeedScreen = ({navigation}) => {
+const DetailsScreen = () => {
     return (
         <View style={styles.container}>
-            <Button color="blue" title="Go to Details Page" onPress={()=>navigation.navigate('Detail')} />
+            <Text>DetailScreen</Text>
         </View>
     )
 }
 
-export default FeedScreen
+export default DetailsScreen
 
 const styles = StyleSheet.create({
     container: {
